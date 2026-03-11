@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة استعلام الشهادات - مدرسة الفاروق للتعليم الأساسي</title>
+    <style>
+        /* ===== ألوان مستوحاة من الشعار ===== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #f0f5fa;  /* خلفية فاتحة ناعمة تتناسب مع الأبيض */
+            text-align: center;
+            color: #1a2e3f;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            animation: fadeIn 1.5s ease-in-out;
+            position: relative;
+            direction: rtl;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* خلفية فقاعات متناسقة مع الشعار */
+        .bg-bubbles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bg-bubbles li {
+            position: absolute;
+            list-style: none;
+            display: block;
+            width: 40px;
+            height: 40px;
+            background: rgba(10, 53, 113, 0.03);  /* أزرق شفاف من الشعار */
+            bottom: -160px;
+            animation: square 25s infinite;
+            transition-timing-function: linear;
+            border-radius: 50%;
+        }
+
+        .bg-bubbles li:nth-child(1) { left: 10%; width: 80px; height: 80px; animation-delay: 0s; animation-duration: 17s; }
+        .bg-bubbles li:nth-child(2) { left: 20%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+        .bg-bubbles li:nth-child(3) { left: 25%; width: 50px; height: 50px; animation-delay: 4s; }
+        .bg-bubbles li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
+        .bg-bubbles li:nth-child(5) { left: 70%; width: 40px; height: 40px; animation-delay: 6s; }
+        .bg-bubbles li:nth-child(6) { left: 80%; width: 120px; height: 120px; animation-delay: 3s; }
+        .bg-bubbles li:nth-child(7) { left: 32%; width: 160px; height: 160px; animation-delay: 7s; }
+        .bg-bubbles li:nth-child(8) { left: 55%; width: 20px; height: 20px; animation-delay: 15s; animation-duration: 40s; }
+        .bg-bubbles li:nth-child(9) { left: 25%; width: 10px; height: 10px; animation-delay: 2s; animation-duration: 40s; }
+        .bg-bubbles li:nth-child(10) { left: 90%; width: 140px; height: 140px; animation-delay: 11s; background: rgba(255, 204, 0, 0.03); } /* ذهبي شفاف */
+
+        @keyframes square {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.5; }
+            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; }
+        }
+
+        /* شعاع ضوئي بألوان الشعار */
+        .light-beam {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(255, 204, 0, 0.02) 0%, 
+                rgba(255, 255, 255, 0) 45%,
+                rgba(10, 53, 113, 0.02) 55%,
+                rgba(255, 204, 0, 0.02) 100%);
+            background-size: 300% 300%;
+            animation: lightBeam 18s ease infinite;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        @keyframes lightBeam {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        /* الهيدر بتدرج الأزرق من الشعار */
+        .header {
+            background: linear-gradient(145deg, #0a3571, #15428b);  /* أزرق الشعار */
+            padding: 25px 20px;
+            box-shadow: 0 4px 20px rgba(10, 53, 113, 0.4);
+            animation: slideDown 1s ease-in-out;
+            position: relative;
+            border-bottom: 4px solid #ffcc00;  /* الأصفر الذهبي من الشعار */
+            z-index: 10;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.7rem;
+            font-weight: bold;
+            background: linear-gradient(to right, #ffcc00, #ffffff);  /* ذهبي إلى أبيض */
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            letter-spacing: 1px;
+        }
+
+        .header h2 {
+            margin: 10px 0;
+            font-size: 1.6rem;
+            color: #ffcc00;  /* ذهبي الشعار */
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            width: 120px;
+            height: auto;
+            margin: 10px;
+            border-radius: 50%;
+            border: 3px solid #ffcc00;
+            box-shadow: 0 0 25px rgba(255, 204, 0, 0.6);
+            transition: all 0.5s ease;
+            background-color: white;
+        }
+
+        .logo:hover {
+            transform: rotate(360deg) scale(1.05);
+            border-color: #ffffff;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+        }
+
+        /* الشريط المتحرك بألوان الشعار */
+        .marquee {
+            background: linear-gradient(145deg, #ffcc00, #e6b800);  /* ذهبي الشعار */
+            color: #0a3571;  /* أزرق الشعار */
+            padding: 16px 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            z-index: 10;
+            border-bottom: 2px solid #ffffff;
+        }
+
+        .marquee::before, .marquee::after {
+            content: '⭐';
+            position: absolute;
+            font-size: 1.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #0a3571;
+            text-shadow: 0 0 5px #fff;
+            z-index: 11;
+        }
+
+        .marquee::before { left: 20px; }
+        .marquee::after { right: 20px; }
+
+        .marquee span {
+            display: inline-block;
+            animation: marquee-reverse 45s linear infinite;
+            padding: 0 20px;
+        }
+
+        @keyframes marquee-reverse {
+            from { transform: translateX(-80%); }
+            to { transform: translateX(80%); }
+        }
+
+        /* الحاوية الرئيسية بألوان فاتحة متناسقة */
+        .container {
+            max-width: 85%;
+            margin: 40px auto;
+            padding: 35px 30px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(10, 53, 113, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1);
+            color: #1a2e3f;
+            animation: fadeInContainer 1s ease-in-out;
+            transform: perspective(1000px) translateZ(0);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 10;
+            border: 1px solid rgba(255, 204, 0, 0.3);
+        }
+
+        .container:hover {
+            box-shadow: 0 25px 45px rgba(10, 53, 113, 0.25), 0 15px 25px rgba(0, 0, 0, 0.15);
+            transform: perspective(1000px) translateZ(15px);
+            border-color: #ffcc00;
+        }
+
+        @keyframes fadeInContainer {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* تنسيق المدخلات بحدود أزرق الشعار */
+        input {
+            width: 92%;
+            padding: 16px;
+            margin: 15px 0;
+            border: 2px solid #0a3571;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            transition: 0.3s;
+            background-color: #f8fbff;
+            font-family: 'Cairo', sans-serif;
+            text-align: right;
+            direction: rtl;
+            box-shadow: inset 0 2px 5px rgba(10, 53, 113, 0.05);
+        }
+
+        input:focus {
+            border-color: #ffcc00;
+            box-shadow: 0 0 12px rgba(255, 204, 0, 0.5), inset 0 1px 3px #fff;
+            outline: none;
+            background-color: #ffffff;
+        }
+
+        /* الزر بألوان الشعار */
+        button {
+            animation: pulse 2s infinite;
+            background: linear-gradient(145deg, #0a3571, #15428b);
+            color: white;
+            padding: 16px 28px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 0 #05234d, 0 10px 15px rgba(10, 53, 113, 0.4);
+            border: 1px solid #ffcc00;
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 204, 0, 0.2);
+            transform: rotate(30deg);
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: linear-gradient(145deg, #15428b, #1a4da3);
+            box-shadow: 0 6px 0 #05234d, 0 12px 20px rgba(10, 53, 113, 0.5);
+            transform: translateY(-2px);
+        }
+
+        button:hover::after {
+            left: 100%;
+        }
+
+        /* نتيجة البحث */
+        #result {
+            background: linear-gradient(145deg, #ffffff, #f0f7ff);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 25px;
+            border-right: 6px solid #ffcc00;  /* ذهبي */
+            transition: all 0.3s ease;
+            color: #1a2e3f;
+            text-align: right;
+            box-shadow: 0 5px 15px rgba(10, 53, 113, 0.1);
+        }
+
+        #result:hover {
+            box-shadow: 0 10px 25px rgba(10, 53, 113, 0.2);
+            transform: translateY(-4px);
+        }
+
+        #result p {
+            padding: 10px;
+            margin: 8px 0;
+            border-bottom: 1px dashed #ffcc00;
+            transition: all 0.2s;
+            font-size: 1.1rem;
+        }
+
+        #result p:hover {
+            background-color: rgba(255, 204, 0, 0.1);
+            padding-right: 20px;
+            border-radius: 5px;
+        }
+
+        #result h3 {
+            color: #0a3571;  /* أزرق الشعار */
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ffcc00;
+            padding-bottom: 10px;
+        }
+
+        #result a {
+            color: #0a3571;
+            font-weight: bold;
+            text-decoration: none;
+            border-bottom: 1px dashed #ffcc00;
+        }
+
+        #result a:hover {
+            color: #ffcc00;
+        }
+
+        /* تذييل بألوان الشعار */
+        .footer {
+            margin-top: 60px;
+            padding: 30px;
+            background: linear-gradient(145deg, #0a3571, #072952);
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: bold;
+            animation: fadeInFooter 1s ease-in-out;
+            position: relative;
+            z-index: 10;
+            border-top: 4px solid #ffcc00;
+            box-shadow: 0 -5px 15px rgba(10, 53, 113, 0.3);
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, #ffcc00, #ffffff, #ffcc00);
+        }
+
+        @keyframes fadeInFooter {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-animation {
+            animation: fadeInResult 0.8s ease-in-out;
+        }
+
+        @keyframes fadeInResult {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* تسمية المدخل بألوان الشعار */
+        label {
+            position: relative;
+            display: inline-block;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #0a3571;
+            display: block;
+            margin-bottom: 15px;
+            background: rgba(255, 204, 0, 0.15);
+            padding: 8px 35px;
+            border-radius: 40px;
+            width: fit-content;
+            margin-right: auto;
+            margin-left: auto;
+            border: 1px solid #ffcc00;
+        }
+
+        label::after {
+            content: '🔍';
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.6rem;
+            animation: searchPulse 1.8s infinite;
+            filter: drop-shadow(0 2px 2px #0a3571);
+        }
+
+        @keyframes searchPulse {
+            0% { transform: translateY(-50%) scale(1); }
+            50% { transform: translateY(-50%) scale(1.2) rotate(5deg); }
+            100% { transform: translateY(-50%) scale(1); }
+        }
+
+        /* عناصر زخرفية إضافية */
+        .container::before {
+            content: '★';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            font-size: 3rem;
+            color: #ffcc00;
+            opacity: 0.3;
+            transform: rotate(15deg);
+        }
+        .container::after {
+            content: '★';
+            position: absolute;
+            bottom: -15px;
+            right: 20px;
+            font-size: 3rem;
+            color: #0a3571;
+            opacity: 0.2;
+            transform: rotate(-10deg);
+        }
+
+        /* تحسين التباين للنصوص */
+        strong {
+            color: #0a3571;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            createBackgroundEffects();
+        };
+
+        function createBackgroundEffects() {
+            const bubblesContainer = document.createElement('ul');
+            bubblesContainer.className = 'bg-bubbles';
+            
+            for (let i = 0; i < 10; i++) {
+                const bubble = document.createElement('li');
+                bubblesContainer.appendChild(bubble);
+            }
+            
+            document.body.appendChild(bubblesContainer);
+
+            const lightBeam = document.createElement('div');
+            lightBeam.className = 'light-beam';
+            document.body.appendChild(lightBeam);
+        }
+
+        async function searchCertificate() {
+            const civilId = document.getElementById('civilId').value.trim();
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '⏳ جاري البحث...';
+
+            const apiUrl = "https://script.google.com/macros/s/AKfycbzc-632fW2wgF_1q3YniucIQpO-fREDw-SyV6Yi24RtByBd-nnJVsuU9PIUjAUsvy1I/exec?civilId=" + civilId;
+
+            try {
+                const response = await fetch(apiUrl);
+                const student = await response.json();
+
+                if (student && student.civilId) {
+                    resultDiv.innerHTML = `
+                        <h3>✅ نتيجة البحث</h3>
+                        <p><strong>👤 الاسم:</strong> ${student.name}</p>
+                        <p><strong>📚 الصف:</strong> ${student.grade}</p>
+                        <p><strong>📊 المجموع:</strong> ${student.total}</p>
+                        <p><strong>📈 النسبة المئوية:</strong> ${student.percentage}%</p>
+                        <p><strong>🏆 الترتيب:</strong> ${student.rank}</p>
+                        <p><strong>📜 الشهادة:</strong> <a href="${student.certificateLink}" target="_blank">🎓 عرض الشهادة</a></p>
+                    `;
+                    resultDiv.classList.add('result-animation');
+                    playSuccessSound();
+                } else {
+                    resultDiv.innerHTML = '<p style="color:#0a3571;">❌ لم يتم العثور على شهادة لهذا الرقم المدني.</p>';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<p style="color:#cc0000;">⚠️ حدث خطأ أثناء جلب البيانات.</p>';
+            }
+        }
+
+        function playSuccessSound() {
+            const audio = new Audio('https://www.soundjay.com/human/applause-01.mp3');
+            audio.play().catch(() => {});
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>مدرسة الفاروق للتعليم الأساسي</h1>
+        <h2>بوابة استعلام الشهادات - العام الدراسي 2026 / 2027 م</h2>
+        <img src="https://g.top4top.io/p_3722n1ovr1.jpeg" alt="شعار المدرسة" class="logo">
+    </div>
+    
+    <div class="marquee"><span>نُبشّركم بأن جميع الشهادات قد رُفعت على المنصة الإلكترونية، فقد أثمر الجهد، وازدهرت الثمار في أجمل حُلَلها. عملنا بصمتٍ وجِدّ، وأخلصنا في الخفاء… حتى خرجت شهاداتكم في أبهى صورة، تليق بتعبكم وسعيكم. فلقد أثبتتم أن الانتظار يصنع الفرق، وأن الصبر طريق التميّز، فاليوم… تُضفَرون، وفرحة الإنجاز تشرق بين أيديكم كما يُشرق الحلم حين يتحقق ✨</span></div>
+    
+    <div class="container">
+        <label for="civilId">أدخل الرقم المدني للطالب:</label>
+        <input type="text" id="civilId" placeholder="مثال: 12345678">
+        <button onclick="searchCertificate()">🎓 عرض الشهادة</button>
+        <div id="result"></div>
+    </div>
+    
+    <div class="footer">
+        &copy; 2026 - 2027 مدرسة الفاروق للتعليم الأساسي. جميع الحقوق محفوظة. <br>
+        مدرسة الفاروق .. منارة العابرين ونور السالكين
+    </div>
+</body>
+</html>
