@@ -462,7 +462,7 @@
             const resultDiv = document.getElementById('result');
             resultDiv.innerHTML = '⏳ جاري البحث...';
 
-            const apiUrl = "https://script.google.com/macros/s/AKfycbziyHV4nMJFwvTJFVXMKfyA3ofvnq6ODV9xI3I3_0xH_JZmiCaQbg2qi-va01iXlwPDLw/exec" + civilId;
+            const apiUrl = "https://script.google.com/macros/s/AKfycbziyHV4nMJFwvTJFVXMKfyA3ofvnq6ODV9xI3I3_0xH_JZmiCaQbg2qi-va01iXlwPDLw/exec?civilId=" + civilId;
 
             try {
                 const response = await fetch(apiUrl);
